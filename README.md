@@ -55,4 +55,27 @@
   
 ![grafik](https://user-images.githubusercontent.com/84840321/157834719-eca73a91-e13a-47dd-bec2-a375c5e36573.png)
 
+# 3. Multi-Conditional replacement
+
+# Replace the values in Sheet1 according to the condition table
+<img width="102" alt="image" src="https://user-images.githubusercontent.com/84840321/158990168-10c201e0-8502-4e18-89d5-0b0615eb48a0.png">
+<img width="101" alt="image" src="https://user-images.githubusercontent.com/84840321/158990224-0270f4a9-a98f-4130-9904-077fea4f0844.png">
+
+let
+
+    Source = Excel.CurrentWorkbook(){[Name="Table2"]}[Content],
+    
+    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Item", type text}, {"Value", Int64.Type}}),
+    
+    Replace = Table.AddColumn( #"Changed Type","New",each if List.PositionOf(Condition[Item],[Item])=-1 then [Value] else Condition[Value]
+    
+    {List.PositionOf(Condition[Item],[Item])})
+    
+in
+
+    Replace
+
+<img width="367" alt="image" src="https://user-images.githubusercontent.com/84840321/158990405-62401f60-c109-4295-a51e-46cfbb92c6b5.png">
+
+
 
